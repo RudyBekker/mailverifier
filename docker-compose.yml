@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  truemail:
+    image: truemail/truemail-rack:v0.6.0 # for latest version you can use just truemail/truemail-rack:latest
+    ports:
+      - 9292:9292
+    environment:
+      VERIFIER_EMAIL: no-reply@mail.ict-srilanka.com
+      ACCESS_TOKENS: xxxyyy
+      VERIFIER_DOMAIN: mail.ict-srilanka.com
+      DEFAULT_VALIDATION_TYPE: mx
+    tty: true
+  node:
+    image: node:12.16.1-alpine
+    volumes:
+      - .:/app
+    working_dir: /app
+    tty: true
+    command: sh -c "npm install"
+
+    # 08fd46fc15c7bdab03352010de245333-7764770b-2f24ceb3

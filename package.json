@@ -1,0 +1,17 @@
+{
+  "name": "true-mailer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "csv": "^5.0.0",
+    "csv-parse": "^4.4.6",
+    "cli-progress": "^3.5.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
