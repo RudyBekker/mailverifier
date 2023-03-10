@@ -26,10 +26,10 @@ function validate(email) {
   axios(config)
     .then(function (response) {
       if (response.data.success) {
-        // check if the email exists in the validated.txt file
+        // check if the email exists in the validated.csv file
         if (
           fs
-            .readFileSync("./validated/validated.txt")
+            .readFileSync("./validated/validated.csv")
             .toString()
             .includes(email)
         ) {
@@ -37,7 +37,7 @@ function validate(email) {
         }
 
         // If the email is not found in the validated.txt, insert it
-        fs.appendFile("./validated/validated.txt", email + "\n", (err) => {
+        fs.appendFile("./validated/validated.csv", email + "\n", (err) => {
           if (err) throw err;
         });
       }

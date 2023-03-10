@@ -6,9 +6,9 @@ services:
     ports:
       - 9292:9292
     environment:
-      VERIFIER_EMAIL: no-reply@mail.ict-srilanka.com
-      ACCESS_TOKENS: xxxyyy
-      VERIFIER_DOMAIN: mail.ict-srilanka.com
+      VERIFIER_EMAIL: ${VERIFIER_EMAIL}
+      ACCESS_TOKENS: ${ACCESS_TOKENS}
+      VERIFIER_DOMAIN: ${VERIFIER_DOMAIN}
       DEFAULT_VALIDATION_TYPE: mx
     tty: true
   node:
