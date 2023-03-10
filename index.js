@@ -1,19 +1,15 @@
 // Import the fs module
 const fs = require("fs");
 
-// Import the parse module
 const parse = require("csv-parse");
 
-// import cli-progress
 const cliProgress = require("cli-progress");
 
-// Import axios
 const axios = require("axios");
 
-// Import async
 const async = require("async");
 
-function validate(email) {
+function validate(email, fileName, progressBar) {
   var config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -27,32 +23,39 @@ function validate(email) {
   return axios(config)
     .then(function (response) {
       if (response.data.success) {
-        // check if the email exists in the validated.csv file
+        // check if the email exists in the validated file
+        const validatedFileName = `./validated/${fileName.slice(0, -4)}_validated.csv`;
+        const fileExists = fs.existsSync(validatedFileName);
         if (
+          fileExists &&
           fs
-            .readFileSync("./validated/validated.csv")
+            .readFileSync(validatedFileName)
             .toString()
             .includes(email)
         ) {
           return;
         }
 
-        // If the email is not found in the validated.csv, insert it
-        fs.appendFile("./validated/validated.csv", email + "\n", (err) => {
-          if (err) throw err;
-        });
+        // If the email is not found in the validated file, insert it
+        if (!fileExists) {
+          fs.writeFileSync(validatedFileName, "email\n");
+        }
+        fs.appendFileSync(validatedFileName, email + "\n");
       }
     })
     .catch(function (error) {
       // Commented to prevent console.log from spamming
       // console.log(error);
       // validate(email);
+    })
+    .finally(function () {
+      progressBar.increment();
     });
 }
 
 // create a new async queue with a maximum concurrency limit of 10
 const q = async.queue((task, callback) => {
-  validate(task.email)
+  validate(task.email, task.fileName, task.progressBar)
     .then(() => callback())
     .catch((err) => callback(err));
 }, 10);
@@ -68,7 +71,9 @@ fs.readdir("./csv", (err, files) => {
 
     // create a new progress bar instance and use shades_classic theme
     const bar1 = new cliProgress.SingleBar(
-      {},
+      {
+        format: "{bar} {percentage}% | ETA: {eta}s | {value}/{total} Emails",
+      },
       cliProgress.Presets.shades_classic
     );
 
@@ -76,11 +81,17 @@ fs.readdir("./csv", (err, files) => {
 
     exec("wc -l ./csv/" + file, function (error, results) {
       // get the line count
-      let lineCount = results.split(" ")[3];
+      let lineCount = results.split(" ")[0];
 
       var count = 0;
 
       bar1.start(lineCount, 0);
+
+      // create the validated file
+      const validatedFileName = `./validated/${file.slice(0, -4)}_validated.csv`;
+      if (!fs.existsSync(validatedFileName)) {
+        fs.writeFileSync(validatedFileName, "email\n");
+      }
 
       // open csv file
       fs.createReadStream("./csv/" + file)
@@ -88,14 +99,29 @@ fs.readdir("./csv", (err, files) => {
         .on("data", function (row) {
           // validate the string to see if its an email
           if (row[0].includes("@")) {
-            // push each email to the queue
-            q.push({ email: row[0] });
+            // push each email and the file name to the queue
+            q.push({
+              email: row[0],
+              fileName: file,
+              progressBar: bar1,
+            });
           }
         })
         .on("end", function () {
           // stop the progress bar
           bar1.stop();
+
+          // count
+          let validatedEmailCount = 0;
+
+          // read the validated file and count the number of lines (excluding header)
+          const validatedEmails = fs.readFileSync(validatedFileName).toString();
+          validatedEmailCount = validatedEmails.split(/\r?\n/).length - 1;
+    
+          console.log(
+            `${validatedEmailCount} emails found valid in file ${file}`
+          );
         });
     });
-  });
 });
+});    
