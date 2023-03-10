@@ -1,3 +1,14 @@
+# Bulk Free Email Verifier
+We were looking for a cost effective way to bulk verify some of our emails in our database, looked everywhere online for a solid solution and the prices were just absolutely insane! 
+
+We looked at multiple open source solutions and nothing was straight forward and easy to use. 
+
+So we went to the drawing board and found a few cool open source projects and modified them for a simple administration of bulk verifying emails 🎉
+
+If you encounter any bugs or issues, or have any suggestions, please let us know or feel free to create a PR and we will merge it.
+
+---
+
 ## Requirement’s
 - Docker
 - Nodejs
