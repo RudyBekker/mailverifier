@@ -1,3 +1,5 @@
+// Path: index.js
+
 // Import the fs module
 const fs = require("fs");
 
@@ -10,9 +12,6 @@ const cliProgress = require("cli-progress");
 // Import axios
 const axios = require("axios");
 
-// Import async
-const async = require("async");
-
 function validate(email) {
   var config = {
     method: "get",
@@ -24,7 +23,7 @@ function validate(email) {
     },
   };
 
-  return axios(config)
+  axios(config)
     .then(function (response) {
       if (response.data.success) {
         // check if the email exists in the validated.csv file
@@ -49,17 +48,6 @@ function validate(email) {
       // validate(email);
     });
 }
-
-// create a new async queue with a maximum concurrency limit of 10
-const q = async.queue((task, callback) => {
-  validate(task.email)
-    .then(() => callback())
-    .catch((err) => callback(err));
-}, 10);
-
-q.drain(() => {
-  console.log("All items have been processed");
-});
 
 // Open the csv folder and loop through the files
 fs.readdir("./csv", (err, files) => {
@@ -88,14 +76,13 @@ fs.readdir("./csv", (err, files) => {
         .on("data", function (row) {
           // validate the string to see if its an email
           if (row[0].includes("@")) {
-            // push each email to the queue
-            q.push({ email: row[0] });
+            validate(row[0]);
           }
-        })
-        .on("end", function () {
-          // stop the progress bar
-          bar1.stop();
         });
     });
+
+    // stop the progress bar
+    bar1.stop();
   });
+  
 });
