@@ -1,13 +1,11 @@
-// Import the fs module
 const fs = require("fs");
-
 const parse = require("csv-parse");
-
 const cliProgress = require("cli-progress");
-
 const axios = require("axios");
-
 const async = require("async");
+require('dotenv').config()
+
+
 
 function validate(email, fileName, progressBar) {
   var config = {
@@ -15,7 +13,7 @@ function validate(email, fileName, progressBar) {
     maxBodyLength: Infinity,
     url: "http://localhost:9292?email=" + email,
     headers: {
-      Authorization: "xxxyyy",
+      Authorization: process.env.ACCESS_TOKEN,
       Accept: "application/json",
     },
   };

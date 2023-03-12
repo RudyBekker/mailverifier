@@ -18,13 +18,19 @@ If you encounter any bugs or issues, or have any suggestions, please let us know
 ## Running the application
 - Start Docker and then run -> docker-compose up -d
 - Install the NPM packages -> npm install
-- Add your mail details to the .env
+- Copy the .env.example contents, create a .env and paste and your mail details to the varriables in the .env
 - running the script -> node index.js
 
 ---
 
 ## How to use the script
 - Upload emails to **csv** folder and then run the script, the **validated** emails will appear in the **validated folder**
+
+---
+## Things left to do
+- [ ]  Optimize the progress bar and outut the validated emails on every file parsed.
+- [ ]  Convert the nodejs project to GoLang for faster processing
+
 
 ---
 
