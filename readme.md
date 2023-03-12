@@ -29,7 +29,7 @@ If you encounter any bugs or issues, or have any suggestions, please let us know
 ---
 ## Things left to do
 - [ ]  Optimize the progress bar and outut the validated emails on every file parsed.
-- [ ]  Convert the nodejs project to GoLang for faster processingVariable
+- [ ]  Convert the nodejs project to GoLang for faster processing
 
 
 ---
