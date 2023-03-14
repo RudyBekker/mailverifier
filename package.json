@@ -1,0 +1,19 @@
+{
+  "name": "Bulk Email Verifier",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "async": "^3.2.4",
+    "axios": "^0.19.0",
+    "cli-progress": "^3.5.1",
+    "csv": "^5.0.0",
+    "csv-parse": "^4.4.6",
+    "dotenv": "^16.0.3"
+  },
+  "author": "Discover360.app",
+  "license": "ISC"
+}
